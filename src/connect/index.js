@@ -8,7 +8,7 @@
  */
 
 import { getStore } from '../store'
-import { wrapownProps } from '../helpers'
+import { wrapOwnPropsFunc, wrapStatesFunc,  wrapActionsFunc } from '../helpers'
 
 export default function connect (mapStateToProps, mapActionToProps) {
   return function connectComponent (Component) {
@@ -20,7 +20,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
     const onStateChange = function () {
       const store = getStore()
       let hasChanged = false
-      let states = mapStateToProps(store.getState(), wrapownProps.call(this))
+      let states = mapStateToProps(store.getState(), wrapOwnPropsFunc.call(this))
       Object.keys(states).forEach((key) => {
         if(this.computed){
           this.computed[key] = function mappedState() {
@@ -42,30 +42,15 @@ export default function connect (mapStateToProps, mapActionToProps) {
       constructor () {
         super()
         const store = getStore()
-        let ownProps = wrapownProps.call(this)
+        let ownProps =  wrapOwnPropsFunc.call(this)
         let states = mapStateToProps(store.getState(), ownProps)
-        let wrapStates = {}
-        Object.keys(states).forEach((key) => {
-          wrapStates[key] = function mappedState() {
-            return states[key]
-          }
-        })
+        let wrapStates = wrapStatesFunc(states)
         this.computed = Object.assign(this.computed || {}, wrapStates, {
           $state: function mappedState() {
             return store.getState()
           }
         })
-        let actions = mapActionToProps(store.dispatch, ownProps)
-        let wrapActions = {}
-        Object.keys(actions).forEach((key) => {
-          wrapActions[key] = function mappedAction(payload) {
-            if (payload.name === 'system' && payload.target && payload.target.dataset) {
-              return actions[key](payload.target.dataset)
-            } else {
-              return actions[key](payload)
-            }
-          }
-        })
+        let wrapActions = wrapActionsFunc(mapActionToProps(store.dispatch, ownProps))
         this.methods = Object.assign(this.methods || {}, wrapActions)
       }
 

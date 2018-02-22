@@ -5,8 +5,8 @@
  * Time: 上午11:42
  *
  */
- 
-export function wrapownProps() {
+
+export function wrapOwnPropsFunc() {
   let ownProps = {}
   let data = this.$data || {}
   let props = this.props || {}
@@ -15,4 +15,29 @@ export function wrapownProps() {
   })
   ownProps.platform = 'web'
   return ownProps
+}
+
+
+export function wrapStatesFunc (states) {
+  let wrapStates = {}
+  Object.keys(states).forEach((key) => {
+    wrapStates[key] = function mappedState() {
+      return states[key]
+    }
+  })
+  return wrapStates
+}
+
+export function wrapActionsFunc (actions) {
+  let wrapActions = {}
+  Object.keys(actions).forEach((key) => {
+    wrapActions[key] = function mappedAction(payload) {
+      if (payload.name === 'system' && payload.target && payload.target.dataset) {
+        return actions[key](payload.target.dataset)
+      } else {
+        return actions[key](payload)
+      }
+    }
+  })
+  return wrapActions
 }
