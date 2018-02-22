@@ -9,7 +9,7 @@
 import { getStore } from '../store'
 import { wrapOwnPropsFunc, wrapStatesFunc,  wrapActionsFunc } from '../helpers'
 
-export default function connect (mapStateToProps, mapActionToProps) {
+export default function connect (mapStateToProps, mapDispatchToProps) {
   return function connectComponent (Component) {
     let unSubscribe = null
     // 绑定
@@ -49,7 +49,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
             return store.getState()
           }
         })
-        let wrapActions = wrapActionsFunc(mapActionToProps(store.dispatch, ownProps))
+        let wrapActions = wrapActionsFunc(mapDispatchToProps(store.dispatch, ownProps))
         this.methods = Object.assign(this.methods || {}, wrapActions)
       }
 
