@@ -1,4 +1,6 @@
 # wepy-redux
 wepy框架可以使用的redux链接库，类似于react-redux
+
 此框架基于wepy提供的wepy-redux，但在基础上了适配了react-redux的原有写法，完全兼容mapStateToProps和mapDispatchToActions参数
-顺便感谢wepy
+
+最后再次顺便感谢wepy
