@@ -29,7 +29,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
       ownProps.platform = 'web'
       let states = mapStateToProps(store.getState(), ownProps)
       Object.keys(states).forEach((k) => {
-        const newV = states[k]();
+        const newV = states[k];
         if (this[k] !== newV) {
           // 不相等
           this[k] = newV;
@@ -50,7 +50,13 @@ export default function connect (mapStateToProps, mapActionToProps) {
         })
         ownProps.platform = 'web'
         let states = mapStateToProps(store.getState(), ownProps)
-        this.computed = Object.assign(this.computed || {}, states )
+        let wrapStates = {}
+        Object.keys(states).forEach((key) => {
+          wrapStates[key] = function () {
+            return states[key]
+          }
+        })
+        this.computed = Object.assign(this.computed || {}, wrapStates)
         let actions = mapActionToProps(store.dispatch, ownProps)
         let wrapActions = {}
         Object.keys(actions).forEach((key) => {
