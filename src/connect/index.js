@@ -37,7 +37,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
         }
       })
       Object.keys(wrapStates).forEach((k) => {
-        const newV = states[k]();
+        const newV = wrapStates[k]();
         if (this[k] !== newV) {
           // 不相等
           this[k] = newV;
