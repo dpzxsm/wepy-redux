@@ -54,7 +54,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
         ownProps.platform = 'web'
         let states = mapStateToProps(store.getState(), ownProps)
         Object.keys(states).forEach((key) => {
-          wrapStates[key] = function () {
+          wrapStates[key] = function mappedState() {
             return states[key]
           }
         })
