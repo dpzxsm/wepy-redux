@@ -14,8 +14,8 @@ export default function connect (mapStateToProps, mapActionToProps) {
   return function connectComponent (Component) {
     let unSubscribe = null
     // 绑定
-    const onLoad = Component.prototype.onLoad
-    const onUnload = Component.prototype.onUnload
+    const onLoadCopy = Component.prototype.onLoad
+    const onUnloadCopy = Component.prototype.onUnload
 
     const onStateChange = function () {
       const store = getStore()
@@ -58,13 +58,13 @@ export default function connect (mapStateToProps, mapActionToProps) {
         const store = getStore()
         unSubscribe = store.subscribe(onStateChange.bind(this))
         onStateChange.call(this)
-        onLoad && onLoad.apply(this, arguments)
+        onLoadCopy && onLoadCopy.apply(this, arguments)
       }
 
       onUnload () {
         unSubscribe && unSubscribe()
         unSubscribe = null
-        onUnload && onUnload.apply(this, arguments)
+        onUnloadCopy && onUnloadCopy.apply(this, arguments)
       }
     }
   }
