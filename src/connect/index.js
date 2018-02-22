@@ -36,6 +36,11 @@ export default function connect (mapStateToProps, mapActionToProps) {
           return states[key]
         }
       })
+      this.computed = Object.assign(this.computed || {}, wrapStates, {
+        $state: function mappedState() {
+          return store.getState()
+        }
+      })
       Object.keys(wrapStates).forEach((k) => {
         const newV = wrapStates[k]();
         if (this[k] !== newV) {
