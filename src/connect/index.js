@@ -61,7 +61,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
         this.computed = Object.assign(this.computed || {}, wrapStates)
         let actions = mapActionToProps(store.dispatch, ownProps)
         Object.keys(actions).forEach((key) => {
-          wrapActions[key] = function (payload) {
+          wrapActions[key] = function mappedAction(payload) {
             if (payload.name === 'system' && payload.target && payload.target.dataset) {
               return actions[key](payload.target.dataset)
             } else {
