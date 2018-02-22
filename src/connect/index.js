@@ -8,6 +8,7 @@
  */
 
 import { getStore } from '../store'
+import { wrapownProps } from '../helpers'
 
 export default function connect (mapStateToProps, mapActionToProps) {
   return function connectComponent (Component) {
@@ -16,33 +17,19 @@ export default function connect (mapStateToProps, mapActionToProps) {
     const onLoad = Component.prototype.onLoad
     const onUnload = Component.prototype.onUnload
 
-    let wrapActions = {}
-    let wrapStates = {}
-
     const onStateChange = function () {
       const store = getStore()
       let hasChanged = false
-      // 这里判断是否需要更新组件
-      let ownProps = {}
-      let data = this.$data || {}
-      let props = this.props || {}
-      Object.keys(props).forEach((key) => {
-        ownProps[key] = data[key]
-      })
-      ownProps.platform = 'web'
-      let states = mapStateToProps(store.getState(), ownProps)
+      let states = mapStateToProps(store.getState(), wrapownProps.call(this))
       Object.keys(states).forEach((key) => {
-        wrapStates[key] = function mappedState() {
-          return states[key]
+        if(this.computed){
+          this.computed[key] = function mappedState() {
+            return states[key]
+          }
         }
       })
-      this.computed = Object.assign(this.computed || {}, wrapStates, {
-        $state: function mappedState() {
-          return store.getState()
-        }
-      })
-      Object.keys(wrapStates).forEach((k) => {
-        const newV = wrapStates[k]();
+      Object.keys(states).forEach((k) => {
+        const newV = states[k];
         if (this[k] !== newV) {
           // 不相等
           this[k] = newV;
@@ -55,14 +42,9 @@ export default function connect (mapStateToProps, mapActionToProps) {
       constructor () {
         super()
         const store = getStore()
-        let ownProps = {}
-        let data = this.$data || {}
-        let props = this.props || {}
-        Object.keys(props).forEach((key) => {
-          ownProps[key] = data[key]
-        })
-        ownProps.platform = 'web'
+        let ownProps = wrapownProps.call(this)
         let states = mapStateToProps(store.getState(), ownProps)
+        let wrapStates = {}
         Object.keys(states).forEach((key) => {
           wrapStates[key] = function mappedState() {
             return states[key]
@@ -74,6 +56,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
           }
         })
         let actions = mapActionToProps(store.dispatch, ownProps)
+        let wrapActions = {}
         Object.keys(actions).forEach((key) => {
           wrapActions[key] = function mappedAction(payload) {
             if (payload.name === 'system' && payload.target && payload.target.dataset) {
