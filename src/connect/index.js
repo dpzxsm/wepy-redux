@@ -31,8 +31,13 @@ export default function connect (mapStateToProps, mapActionToProps) {
       })
       ownProps.platform = 'web'
       let states = mapStateToProps(store.getState(), ownProps)
-      Object.keys(states).forEach((k) => {
-        const newV = states[k];
+      Object.keys(states).forEach((key) => {
+        wrapStates[key] = function mappedState() {
+          return states[key]
+        }
+      })
+      Object.keys(wrapStates).forEach((k) => {
+        const newV = states[k]();
         if (this[k] !== newV) {
           // 不相等
           this[k] = newV;
@@ -58,7 +63,11 @@ export default function connect (mapStateToProps, mapActionToProps) {
             return states[key]
           }
         })
-        this.computed = Object.assign(this.computed || {}, wrapStates)
+        this.computed = Object.assign(this.computed || {}, wrapStates, {
+          $state: function mappedState() {
+            return store.getState()
+          }
+        })
         let actions = mapActionToProps(store.dispatch, ownProps)
         Object.keys(actions).forEach((key) => {
           wrapActions[key] = function mappedAction(payload) {
