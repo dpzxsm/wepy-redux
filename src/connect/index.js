@@ -16,6 +16,9 @@ export default function connect (mapStateToProps, mapActionToProps) {
     const onLoad = Component.prototype.onLoad
     const onUnload = Component.prototype.onUnload
 
+    let wrapActions = {}
+    let wrapStates = {}
+
     const onStateChange = function () {
       const store = getStore()
       let hasChanged = false
@@ -50,7 +53,6 @@ export default function connect (mapStateToProps, mapActionToProps) {
         })
         ownProps.platform = 'web'
         let states = mapStateToProps(store.getState(), ownProps)
-        let wrapStates = {}
         Object.keys(states).forEach((key) => {
           wrapStates[key] = function () {
             return states[key]
@@ -58,7 +60,6 @@ export default function connect (mapStateToProps, mapActionToProps) {
         })
         this.computed = Object.assign(this.computed || {}, wrapStates)
         let actions = mapActionToProps(store.dispatch, ownProps)
-        let wrapActions = {}
         Object.keys(actions).forEach((key) => {
           wrapActions[key] = function (payload) {
             if (payload.name === 'system' && payload.target && payload.target.dataset) {
