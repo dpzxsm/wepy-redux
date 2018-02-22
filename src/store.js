@@ -17,3 +17,4 @@ export function getStore () {
 export function setStore (s) {
     store = s;
 }
+
