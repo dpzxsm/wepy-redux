@@ -8,7 +8,6 @@
  */
 
 import { getStore } from '../store'
-import { mapState, mapActions } from '../helpers'
 
 export default function connect (mapStateToProps, mapActionToProps) {
   return function connectComponent (Component) {
@@ -51,11 +50,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
         })
         ownProps.platform = 'web'
         let states = mapActionToProps(store.dispatch, ownProps)
-        this.computed = Object.assign(this.computed || {}, states, mapState({
-          $state (state) {
-            return state
-          }
-        }))
+        this.computed = Object.assign(this.computed || {}, states )
         let actions = mapActionToProps(store.dispatch, ownProps)
         let wrapActions = {}
         Object.keys(actions).forEach((key) => {
