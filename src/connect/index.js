@@ -49,7 +49,7 @@ export default function connect (mapStateToProps, mapActionToProps) {
           ownProps[key] = data[key]
         })
         ownProps.platform = 'web'
-        let states = mapActionToProps(store.dispatch, ownProps)
+        let states = mapStateToProps(store.dispatch, ownProps)
         this.computed = Object.assign(this.computed || {}, states )
         let actions = mapActionToProps(store.dispatch, ownProps)
         let wrapActions = {}
