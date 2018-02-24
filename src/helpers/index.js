@@ -13,7 +13,6 @@ export function wrapOwnPropsFunc() {
   Object.keys(props).forEach((key) => {
     ownProps[key] = data[key]
   })
-  ownProps.platform = 'web'
   return ownProps
 }
 
