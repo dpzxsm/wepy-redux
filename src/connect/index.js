@@ -20,12 +20,14 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
       const store = getStore()
       let hasChanged = false
       let states = mapStateToProps(store.getState(), wrapOwnPropsFunc.call(this))
+      let data = this.$data || {}
       Object.keys(states).forEach((key) => {
         if(this.computed){
           this.computed[key] = function mappedState() {
             return states[key]
           }
         }
+        if(!data.hasOwnProperty(key)) this.$data[key] = states[key]
       })
       Object.keys(states).forEach((k) => {
         const newV = states[k];
