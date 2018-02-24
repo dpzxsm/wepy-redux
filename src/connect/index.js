@@ -27,7 +27,7 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
             return states[key]
           }
         }
-        if(!data.hasOwnProperty(key)) this.$data[key] = states[key]
+        if(!data.hasOwnProperty(key)) this.$data[key] = undefined
       })
       Object.keys(states).forEach((k) => {
         const newV = states[k];
