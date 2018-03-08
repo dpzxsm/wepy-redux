@@ -53,6 +53,6 @@ export function injectGlobalProps (props) {
 
 export function injectGlobalPayload (payload) {
   Object.keys(payload).forEach((key) => {
-    globalProps[key] = payload[key]
+    globalPayload[key] = payload[key]
   })
 }
