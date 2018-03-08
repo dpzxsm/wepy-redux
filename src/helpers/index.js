@@ -7,6 +7,7 @@
  */
 
 const globalProps = {}
+const globalPayload = {}
 
 export function wrapOwnPropsFunc() {
   let ownProps = { ...globalProps }
@@ -34,9 +35,9 @@ export function wrapActionsFunc (actions) {
   Object.keys(actions).forEach((key) => {
     wrapActions[key] = function mappedAction(payload) {
       if (payload && payload.name === 'system' && payload.target && payload.target.dataset) {
-        return actions[key](payload.target.dataset)
+        return actions[key](Object.assign({}, globalPayload, payload.target.dataset))
       } else {
-        return actions[key](payload)
+        return actions[key](Object.assign({}, globalPayload, payload))
       }
     }
   })
@@ -47,5 +48,11 @@ export function wrapActionsFunc (actions) {
 export function injectGlobalProps (props) {
   Object.keys(props).forEach((key) => {
     globalProps[key] = props[key]
+  })
+}
+
+export function injectGlobalPayload (payload) {
+  Object.keys(payload).forEach((key) => {
+    globalPayload[key] = payload[key]
   })
 }
