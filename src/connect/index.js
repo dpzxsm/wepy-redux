@@ -10,6 +10,7 @@ import { getStore } from '../store'
 import { wrapOwnPropsFunc, wrapStatesFunc,  wrapActionsFunc } from '../helpers'
 
 export default function connect (mapStateToProps, mapDispatchToProps) {
+  let injectedProps = {}
   return function connectComponent (Component) {
     let unSubscribe = null
     // 绑定
@@ -19,7 +20,8 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
     const onStateChange = function () {
       const store = getStore()
       let hasChanged = false
-      let states = mapStateToProps(store.getState(), wrapOwnPropsFunc.call(this))
+      let ownProps =  Object.assign(wrapOwnPropsFunc.call(this), injectedProps)
+      let states = mapStateToProps(store.getState(), ownProps)
       let data = this.$data || {}
       Object.keys(states).forEach((key) => {
         if(this.computed){
@@ -43,7 +45,7 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
       constructor () {
         super()
         const store = getStore()
-        let ownProps =  wrapOwnPropsFunc.call(this)
+        let ownProps =  Object.assign(wrapOwnPropsFunc.call(this), injectedProps)
         let states = mapStateToProps(store.getState(), ownProps)
         let wrapStates = wrapStatesFunc(states)
         this.computed = Object.assign(this.computed || {}, wrapStates, {
@@ -52,7 +54,11 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
           }
         })
         let wrapActions = wrapActionsFunc(mapDispatchToProps(store.dispatch, ownProps))
-        this.methods = Object.assign(this.methods || {}, wrapActions)
+        this.methods = Object.assign(this.methods || {}, wrapActions, {
+          injectProps: function (props) {
+            injectedProps = Object.assign(injectedProps, props)
+          }
+        })
       }
 
       onLoad () {
