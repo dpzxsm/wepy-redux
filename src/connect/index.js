@@ -10,7 +10,7 @@ import { getStore } from '../store'
 import { wrapOwnPropsFunc, wrapStatesFunc,  wrapActionsFunc } from '../helpers'
 
 export default function connect (mapStateToProps, mapDispatchToProps) {
-  let injectedProps = {}
+  const injectedProps = {}
   return function connectComponent (Component) {
     let unSubscribe = null
     // 绑定
@@ -56,7 +56,7 @@ export default function connect (mapStateToProps, mapDispatchToProps) {
         let wrapActions = wrapActionsFunc(mapDispatchToProps(store.dispatch, ownProps))
         this.methods = Object.assign(this.methods || {}, wrapActions, {
           injectProps: function (props) {
-            injectedProps = Object.assign(injectedProps, props)
+            Object.assign(injectedProps, props)
           }
         })
       }
