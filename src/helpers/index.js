@@ -9,6 +9,7 @@
 const globalProps = {}
 
 export function wrapOwnPropsFunc() {
+  let ownProps = { ...globalProps }
   let data = this.$data || {}
   let props = this.props || {}
   Object.keys(props).forEach((key) => {
