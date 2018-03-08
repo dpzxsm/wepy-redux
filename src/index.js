@@ -10,8 +10,11 @@
 
 import connect from './connect';
 import { setStore, getStore } from './store';
+import { injectGlobalProps, injectGlobalPayload} from './helpers'
 export {
     connect,
     setStore,
     getStore,
+    injectGlobalProps,
+    injectGlobalPayload
 }
