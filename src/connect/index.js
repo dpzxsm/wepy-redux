@@ -69,8 +69,8 @@ export default function connect (mapStateToProps, mapDispatchToProps, cleanData)
         unSubscribe = null
         onUnloadCopy && onUnloadCopy.apply(this, arguments)
         // 清理缓存
-        if(cleanData){
-          Object.keys(cleanData).forEach((key) => {
+        if(cleanData && Array.isArray(cleanData)){
+          cleanData.forEach((key) => {
             delete this.computed[key]
           })
         }
