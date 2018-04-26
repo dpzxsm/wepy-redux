@@ -71,9 +71,9 @@ export default function connect (mapStateToProps, mapDispatchToProps, cleanData)
         // 清理缓存
         if(cleanData && Array.isArray(cleanData)){
           cleanData.forEach((key) => {
-            delete this.computed[key]
-          })
-        }
+            this.computed[key] = function mappedState() {}
+            this[key] = null
+          })}
       }
     }
   }
