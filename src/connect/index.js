@@ -9,7 +9,7 @@
 import { getStore } from '../store'
 import { wrapOwnPropsFunc, wrapStatesFunc,  wrapActionsFunc } from '../helpers'
 
-export default function connect (mapStateToProps, mapDispatchToProps, isClean) {
+export default function connect (mapStateToProps, mapDispatchToProps, cleanData) {
   const injectedProps = {}
   return function connectComponent (Component) {
     let unSubscribe = null
@@ -59,14 +59,6 @@ export default function connect (mapStateToProps, mapDispatchToProps, isClean) {
 
       onLoad () {
         const store = getStore()
-        if(isClean){
-          let ownProps =  Object.assign(wrapOwnPropsFunc.call(this), injectedProps)
-          let states = mapStateToProps(store.getState(), ownProps)
-          Object.keys(states).forEach((key) => {
-            states[key] = null
-          })
-          this.setData(states)
-        }
         unSubscribe = store.subscribe(onStateChange.bind(this))
         onStateChange.call(this)
         onLoadCopy && onLoadCopy.apply(this, arguments)
@@ -76,6 +68,12 @@ export default function connect (mapStateToProps, mapDispatchToProps, isClean) {
         unSubscribe && unSubscribe()
         unSubscribe = null
         onUnloadCopy && onUnloadCopy.apply(this, arguments)
+        // 清理缓存
+        if(cleanData){
+          Object.keys(cleanData).forEach((key) => {
+            delete this.computed[key]
+          })
+        }
       }
     }
   }
