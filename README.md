@@ -1,5 +1,5 @@
 # wepy-redux
-wepy框架可以使用的redux连接库
+如果你的小程序项目使用了wepy框架，那么你可以选择这个库作为redux的链接库或者迁移react-redux项目到小程序上
 
 ### 安装
 npm install git+https:\/\/github.com/dpzxsm/wepy-redux.git --save
