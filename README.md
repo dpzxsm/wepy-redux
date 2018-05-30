@@ -30,7 +30,7 @@ ownProps的属性主要是被连接的组件的props属性，值则是从组件d
 前两个参数同react-redux, 为函数类型，其中第一个参数可以将state中的属性注入到组件的data中，第二个参数则是将action注入到组件的methods中。第三个参数则是数组类型，可以在页面销毁后清空你想要清空的data属性，主要用于解决小程序的页面缓存bug
 
 示例：
-```javascript
+```jsx
 export default connect((state, ownProp) => {
   return {
     name: state.name,
@@ -47,7 +47,7 @@ export default connect((state, ownProp) => {
 相当于初始化，必须在项目初始化的时候去设置，可以在app.wpy中调用
 
 示例：
-```javascript
+```jsx
 const store = createStore(reducer, applyMiddleware(thunk, logger))
 setStore(store)
 ```
@@ -56,7 +56,7 @@ setStore(store)
 某些情况想直接使用store对象，可以来获取实例，通常不建议使用
 
 示例：
-```javascript
+```jsx
 const store = getStore()
 let state = store.getState()
 let dispatch = store.dispatch
@@ -66,7 +66,7 @@ let dispatch = store.dispatch
 顾名思义，就是给所有的ownProps添加静态属性, 大部分情况下用不着，谨慎使用
 
 示例：
-```javascript
+```jsx
 injectGlobalProps({ version: '1.0.0' })
 ```
 
@@ -74,7 +74,7 @@ injectGlobalProps({ version: '1.0.0' })
 顾名思义，就是给所有的action添加静态参数, 大部分情况下用不着，谨慎使用
 
 示例：
-```javascript
+```jsx
 injectGlobalPayload({ version: '1.0.0' })
 ```
 
