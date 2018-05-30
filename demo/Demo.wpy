@@ -1,0 +1,44 @@
+/**
+* Empty JS File be created by WebStorm
+* Author: suming
+* Date: 2018/5/30
+* Time: 上午10:10
+*
+*/
+<style lang="less">
+
+</style>
+<template>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import DemoConnector from './DemoConnector'
+
+  @DemoConnector
+  export default class Demo extends wepy.page {
+    props = {
+      title: {
+        type: String,
+        default: ''
+      }
+    }
+
+    data = {
+      title: ''
+    }
+
+    onLoad(){
+
+      // 可以通过injectProps方法来直接给ownProps添加属性
+      this.methods.injectProps({
+        content: '这是直接注入的内容'
+      })
+      // 如果是wepy的组件的话，ownProps就是组件的props，但这里是page其实是不支持props
+      // 所以这里取巧了，本来wepy的props是通过父组件来传递过来, 但是这种写法同样可以做到伪装ownProps的作用
+      // 最后更新data中title值
+      this.title = '这是标题'
+    }
+  }
+</script>
