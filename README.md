@@ -19,8 +19,8 @@ ownProps的属性主要是被连接的组件的props属性，值则是从组件d
 
 | 可以被import的属性 | 类型 | 参数 | 描述 |
 |-------------|----------|--------------|----------------------------------------------------------------|
-| `connect` | `Function` | (func, func, array) | redux链接函数，用法请参考 |
-| `setStore`   | `Function` | (obj) | 设置store的实例(必须在项目初始化的时候set) |
+| `connect` | `Function` | (func, func, array) | redux链接函数 |
+| `setStore`   | `Function` | (obj) | 设置store的实例 |
 | `getStore`     | `Function` | () | 获取store的实例 |
 | `injectGlobalProps`     | `Function` | (obj) | 全局对ownProps参数注入属性 |
 | `injectGlobalPayload`     | `Function` | (obj) | 全局对action参数注入属性 |
