@@ -48,7 +48,7 @@ export default function connect (mapStateToProps, mapDispatchToProps, cleanData)
         let ownProps =  Object.assign(wrapOwnPropsFunc.call(this), injectedProps)
         let states = mapStateToProps(store.getState(), ownProps)
         let wrapStates = wrapStatesFunc(states)
-        this.computed = Object.assign(this.computed || {}, wrapStates)
+        this.computed = Object.assign({},  wrapStates, this.computed || {})
         let wrapActions = wrapActionsFunc(mapDispatchToProps(store.dispatch, ownProps))
         this.methods = Object.assign(this.methods || {}, wrapActions, {
           injectProps: (props) => {
